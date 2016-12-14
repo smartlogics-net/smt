@@ -1,12 +1,12 @@
 #############################################################################
 #                                                                           #
 # This file has 2 purposes:                                                 #
-#   1) Provide an explanation of the files used by FBCMD                    #
-#   2) Provide a list of files for fbcmd_update.php to download             #
+#   1) Provide an explanation of the files used by SMT                      #
+#   2) Provide a list of files for smt_update.php to download               #
 #                                                                           #
 #############################################################################
 
-fbcmd.php       # The main software PHP script
+smt.php         # The main software PHP script
 readme.txt      # Simple Distribution Notes
 gpl.txt         # GNU General Public License
 
@@ -27,12 +27,12 @@ facebook/jsonwrapper/JSON/LICENSE
 
 # The following are misc. support files
 
-support/test_fb_connect.php        # Test to see if you can connect to FB
-support/test_php.php               # Test some basic PHP functionality
-support/my_fbcmd.php               # example for creating your own commands
-support/fbcmd_include.php          # Helper functions for my_fbcmd.php
-support/sample-loadinfo-img.php    # sample for the LOADINFO command
-support/sample-loadinfo-text.php   # sample for the LOADINFO command
+#support/test_fb_connect.php        # Test to see if you can connect to FB
+#support/test_php.php               # Test some basic PHP functionality
+#support/my_fbcmd.php               # example for creating your own commands
+#support/fbcmd_include.php          # Helper functions for my_fbcmd.php
+#support/sample-loadinfo-img.php    # sample for the LOADINFO command
+#support/sample-loadinfo-text.php   # sample for the LOADINFO command
 
 #############################################################################
 
@@ -48,11 +48,11 @@ support/sample-loadinfo-text.php   # sample for the LOADINFO command
 
 #############################################################################
 
-# The following files are specially handled by fbcmd_update:
+# The following files are specially handled by smt_update:
 
 # filelist.txt       # This File
-# fbcmd_update.php   # The program to update the fbcmd distribution
+# smt_update.php     # The program to update the smt distribution
 
-# fbmcd.bat          # The batch file to run FBCMD (Windows)
-# fbcmd              # The bash file to run FBCMD (Mac/Linux)
+# smt.bat            # The batch file to run SMT (Windows)
+# smt                # The bash file to run SMT (Mac/Linux)
 
