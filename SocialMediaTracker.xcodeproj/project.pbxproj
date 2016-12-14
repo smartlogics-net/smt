@@ -1,0 +1,338 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E90BA7CC1E0202BD00B7AA98 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = E90BA7C11E0202BD00B7AA98 /* README.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E93AD9791DEC79CA00150CC7 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = smt;
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		E90BA7AD1E0202BD00B7AA98 /* composer-setup.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "composer-setup.php"; sourceTree = "<group>"; };
+		E90BA7AE1E0202BD00B7AA98 /* composer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = composer.json; sourceTree = "<group>"; };
+		E90BA7B01E0202BD00B7AA98 /* facebook.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = facebook.php; sourceTree = "<group>"; };
+		E90BA7B11E0202BD00B7AA98 /* facebook_desktop.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = facebook_desktop.php; sourceTree = "<group>"; };
+		E90BA7B21E0202BD00B7AA98 /* facebook_mobile.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = facebook_mobile.php; sourceTree = "<group>"; };
+		E90BA7B31E0202BD00B7AA98 /* facebookapi_php5_restlib.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = facebookapi_php5_restlib.php; sourceTree = "<group>"; };
+		E90BA7B61E0202BD00B7AA98 /* JSON.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = JSON.php; sourceTree = "<group>"; };
+		E90BA7B71E0202BD00B7AA98 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		E90BA7B81E0202BD00B7AA98 /* jsonwrapper.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = jsonwrapper.php; sourceTree = "<group>"; };
+		E90BA7B91E0202BD00B7AA98 /* jsonwrapper_inner.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = jsonwrapper_inner.php; sourceTree = "<group>"; };
+		E90BA7BA1E0202BD00B7AA98 /* facebook.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = facebook.xcconfig; sourceTree = "<group>"; };
+		E90BA7BB1E0202BD00B7AA98 /* fb-callback.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "fb-callback.php"; sourceTree = "<group>"; };
+		E90BA7BC1E0202BD00B7AA98 /* fb-graph_user.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "fb-graph_user.php"; sourceTree = "<group>"; };
+		E90BA7BD1E0202BD00B7AA98 /* filelist.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = filelist.txt; sourceTree = "<group>"; };
+		E90BA7BE1E0202BD00B7AA98 /* gpl.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gpl.txt; sourceTree = "<group>"; };
+		E90BA7BF1E0202BD00B7AA98 /* installer */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = installer; sourceTree = "<group>"; };
+		E90BA7C01E0202BD00B7AA98 /* login.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = login.php; sourceTree = "<group>"; };
+		E90BA7C11E0202BD00B7AA98 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E90BA7C21E0202BD00B7AA98 /* setup.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = setup.sh; sourceTree = "<group>"; };
+		E90BA7C31E0202BD00B7AA98 /* smt_update.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = smt_update.php; sourceTree = "<group>"; };
+		E90BA7C41E0202BD00B7AA98 /* smt.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = smt.php; sourceTree = "<group>"; };
+		E90BA7C61E0202BD00B7AA98 /* fbcmd_include.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = fbcmd_include.php; sourceTree = "<group>"; };
+		E90BA7C71E0202BD00B7AA98 /* my_fbcmd.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = my_fbcmd.php; sourceTree = "<group>"; };
+		E90BA7C81E0202BD00B7AA98 /* sample-loadinfo-img.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "sample-loadinfo-img.php"; sourceTree = "<group>"; };
+		E90BA7C91E0202BD00B7AA98 /* sample-loadinfo-text.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "sample-loadinfo-text.php"; sourceTree = "<group>"; };
+		E90BA7CA1E0202BD00B7AA98 /* test_fb_connect.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_fb_connect.php; sourceTree = "<group>"; };
+		E90BA7CB1E0202BD00B7AA98 /* test_php.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_php.php; sourceTree = "<group>"; };
+		E93AD97B1DEC79CB00150CC7 /* SocialMediaTracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = SocialMediaTracker; path = /Users/hendrikl/workspace/SocialMediaTracker/smt/build/Debug/SocialMediaTracker; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E93AD9781DEC79CA00150CC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E90BA7AF1E0202BD00B7AA98 /* facebook */ = {
+			isa = PBXGroup;
+			children = (
+				E90BA7B01E0202BD00B7AA98 /* facebook.php */,
+				E90BA7B11E0202BD00B7AA98 /* facebook_desktop.php */,
+				E90BA7B21E0202BD00B7AA98 /* facebook_mobile.php */,
+				E90BA7B31E0202BD00B7AA98 /* facebookapi_php5_restlib.php */,
+				E90BA7B41E0202BD00B7AA98 /* jsonwrapper */,
+			);
+			path = facebook;
+			sourceTree = "<group>";
+		};
+		E90BA7B41E0202BD00B7AA98 /* jsonwrapper */ = {
+			isa = PBXGroup;
+			children = (
+				E90BA7B51E0202BD00B7AA98 /* JSON */,
+				E90BA7B81E0202BD00B7AA98 /* jsonwrapper.php */,
+				E90BA7B91E0202BD00B7AA98 /* jsonwrapper_inner.php */,
+			);
+			path = jsonwrapper;
+			sourceTree = "<group>";
+		};
+		E90BA7B51E0202BD00B7AA98 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				E90BA7B61E0202BD00B7AA98 /* JSON.php */,
+				E90BA7B71E0202BD00B7AA98 /* LICENSE */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		E90BA7C51E0202BD00B7AA98 /* support */ = {
+			isa = PBXGroup;
+			children = (
+				E90BA7C61E0202BD00B7AA98 /* fbcmd_include.php */,
+				E90BA7C71E0202BD00B7AA98 /* my_fbcmd.php */,
+				E90BA7C81E0202BD00B7AA98 /* sample-loadinfo-img.php */,
+				E90BA7C91E0202BD00B7AA98 /* sample-loadinfo-text.php */,
+				E90BA7CA1E0202BD00B7AA98 /* test_fb_connect.php */,
+				E90BA7CB1E0202BD00B7AA98 /* test_php.php */,
+			);
+			path = support;
+			sourceTree = "<group>";
+		};
+		E93AD9721DEC79CA00150CC7 = {
+			isa = PBXGroup;
+			children = (
+				E90BA7AD1E0202BD00B7AA98 /* composer-setup.php */,
+				E90BA7AE1E0202BD00B7AA98 /* composer.json */,
+				E90BA7AF1E0202BD00B7AA98 /* facebook */,
+				E90BA7BA1E0202BD00B7AA98 /* facebook.xcconfig */,
+				E90BA7BB1E0202BD00B7AA98 /* fb-callback.php */,
+				E90BA7BC1E0202BD00B7AA98 /* fb-graph_user.php */,
+				E90BA7BD1E0202BD00B7AA98 /* filelist.txt */,
+				E90BA7BE1E0202BD00B7AA98 /* gpl.txt */,
+				E90BA7BF1E0202BD00B7AA98 /* installer */,
+				E90BA7C01E0202BD00B7AA98 /* login.php */,
+				E90BA7C11E0202BD00B7AA98 /* README.md */,
+				E90BA7C21E0202BD00B7AA98 /* setup.sh */,
+				E90BA7C31E0202BD00B7AA98 /* smt_update.php */,
+				E90BA7C41E0202BD00B7AA98 /* smt.php */,
+				E90BA7C51E0202BD00B7AA98 /* support */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E93AD97A1DEC79CA00150CC7 /* SocialMediaTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E93AD9821DEC79CB00150CC7 /* Build configuration list for PBXNativeTarget "SocialMediaTracker" */;
+			buildPhases = (
+				E93AD9771DEC79CA00150CC7 /* Sources */,
+				E93AD9781DEC79CA00150CC7 /* Frameworks */,
+				E93AD9791DEC79CA00150CC7 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SocialMediaTracker;
+			productName = facebook.downloader;
+			productReference = E93AD97B1DEC79CB00150CC7 /* SocialMediaTracker */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E93AD9731DEC79CA00150CC7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0810;
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = "SmartLogics Software & Consulting GmbH";
+				TargetAttributes = {
+					E93AD97A1DEC79CA00150CC7 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = J44F4PUJEU;
+						LastSwiftMigration = 0810;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E93AD9761DEC79CA00150CC7 /* Build configuration list for PBXProject "SocialMediaTracker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E93AD9721DEC79CA00150CC7;
+			productRefGroup = E93AD9721DEC79CA00150CC7;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E93AD97A1DEC79CA00150CC7 /* SocialMediaTracker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E93AD9771DEC79CA00150CC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E90BA7CC1E0202BD00B7AA98 /* README.md in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E93AD9801DEC79CB00150CC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E93AD9811DEC79CB00150CC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E93AD9831DEC79CB00150CC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = J44F4PUJEU;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "facebook.tracker/SocialMediaTracker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		E93AD9841DEC79CB00150CC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = J44F4PUJEU;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "facebook.tracker/SocialMediaTracker-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E93AD9761DEC79CA00150CC7 /* Build configuration list for PBXProject "SocialMediaTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E93AD9801DEC79CB00150CC7 /* Debug */,
+				E93AD9811DEC79CB00150CC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E93AD9821DEC79CB00150CC7 /* Build configuration list for PBXNativeTarget "SocialMediaTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E93AD9831DEC79CB00150CC7 /* Debug */,
+				E93AD9841DEC79CB00150CC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E93AD9731DEC79CA00150CC7 /* Project object */;
+}
