@@ -50,6 +50,7 @@
 		E90BA7C91E0202BD00B7AA98 /* sample-loadinfo-text.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = "sample-loadinfo-text.php"; sourceTree = "<group>"; };
 		E90BA7CA1E0202BD00B7AA98 /* test_fb_connect.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_fb_connect.php; sourceTree = "<group>"; };
 		E90BA7CB1E0202BD00B7AA98 /* test_php.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_php.php; sourceTree = "<group>"; };
+		E90BA7CD1E02037400B7AA98 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		E93AD97B1DEC79CB00150CC7 /* SocialMediaTracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = SocialMediaTracker; path = /Users/hendrikl/workspace/SocialMediaTracker/smt/build/Debug/SocialMediaTracker; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +123,7 @@
 				E90BA7BF1E0202BD00B7AA98 /* installer */,
 				E90BA7C01E0202BD00B7AA98 /* login.php */,
 				E90BA7C11E0202BD00B7AA98 /* README.md */,
+				E90BA7CD1E02037400B7AA98 /* readme.txt */,
 				E90BA7C21E0202BD00B7AA98 /* setup.sh */,
 				E90BA7C31E0202BD00B7AA98 /* smt_update.php */,
 				E90BA7C41E0202BD00B7AA98 /* smt.php */,
