@@ -1,6 +1,6 @@
 <?php
-	//  downloader.php
-	//  SocialMediaTracker
+	//  smt.php
+	//  Social Media Tracker
 	//
 	//  Created by Hendrik Lange on 09.12.16.
 	//  Copyright © 2016 SmartLogics Software & Consulting GmbH. All rights reserved.
