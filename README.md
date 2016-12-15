@@ -1,4 +1,5 @@
 # Social Media Tracker
+'''
 ////////////////////////////////////////////////////////////////////////////////
 //                     _                                                      //
 //                    | |                                                     //
@@ -19,13 +20,13 @@
 //   Copyright (c) 2016 SmartLogics Software & Consulting GmbH                //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
+'''
+(http://smt.smartlogics.net)
 
-[http://smt.smartlogics.net]
-
-- [Project Home Page]      http://voicelink-velia.firewall-gateway.net/smt
-- [Facebook Page]          http://facebook.com/smt
-- [Discussion Group]       http://groups.google.com/group/smt
-- [Open Source Repository] http://github.com/smartlogics-net/smt
+- [Project Home Page]      (http://voicelink-velia.firewall-gateway.net/smt)
+- [Facebook Page]          (http://facebook.com/smt)
+- [Discussion Group]       (http://groups.google.com/group/smt)
+- [Open Source Repository] (http://github.com/smartlogics-net/smt)
                                                                          
 Copyright (c) 2016 SmartLogics Software & Consulting GmbH                
                                                                          
