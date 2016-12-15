@@ -45,6 +45,10 @@ facebook/jsonwrapper/JSON/LICENSE
 
 #############################################################################
 
+# The following are used by Composer, the Dependency Manager for PHP
+
+composer.json           # Project Setup file describes the dependencies of your
+                        # project and may contain other metadata as well.
 
 #############################################################################
 
