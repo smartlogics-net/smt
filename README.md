@@ -2,8 +2,7 @@
 Social Media Tracker
 [http://smt.smartlogics.net]
 
-- [Project Home Page]
--: http://voicelink-velia.firewall-gateway.net/smt
+- [Project Home Page]      http://voicelink-velia.firewall-gateway.net/smt
 - [Facebook Page]          http://facebook.com/smt
 - [Discussion Group]       http://groups.google.com/group/smt
 - [Open Source Repository] http://github.com/smartlogics-net/smt
