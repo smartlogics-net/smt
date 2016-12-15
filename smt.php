@@ -1,10 +1,59 @@
+#!/usr/bin/php
 <?php
-	//  smt.php
-	//  Social Media Tracker
-	//
-	//  Created by Hendrik Lange on 09.12.16.
-	//  Copyright © 2016 SmartLogics Software & Consulting GmbH. All rights reserved.
-	require_once __DIR__ . '/vendor/autoload.php';
+
+////////////////////////////////////////////////////////////////////////////////
+//                     _                                                      //
+//                    | |                                                     //
+//    ____ _ __ ___  _| |_                                                    //
+//   / ___| '_ ` _ \|_   _|                                                   //
+//   \__ \| | | | | | | |_                                                    //
+//   |___/|_| |_| |_|  \__|                                                   //
+//                                                                            //
+//   Social Media Tracker Utility                                             //
+//   http://voicelink-velia.firewall-gateway.net/smt                          //
+//   http://smt.smartlogics.net                                               //
+//   Copyright (c) 2016 SmartLogics Software & Consulting GmbH                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  This program is free software: you can redistribute it and/or modify      //
+//  it under the terms of the GNU General Public License as published by      //
+//  the Free Software Foundation, either version 3 of the License, or         //
+//  (at your option) any later version.                                       //
+//                                                                            //
+//  This program is distributed in the hope that it will be useful,           //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of            //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             //
+//  GNU General Public License for more details.                              //
+//                                                                            //
+//  You should have received a copy of the GNU General Public License         //
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.     //
+//                                                                            //
+//  see facebook.php, JSON.php & JSON-LICENSE for additional information      //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//   Having said all that, the author would love you to send him:             //
+//   Suggestions,  Modifications and Improvements for re-distribution.        //
+//                                                                            //
+//   http://fbcmd.dtompkins.com/contribute                                    //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//   http://fbcmd.dtompkins.com/history for a revision history.               //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//   Disclaimer: This is my first (and currently only) PHP applicaiton,       //
+//               so my apologies if I don't follow PHP best practices.        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+    
+    $smtVersion = '1.0';
+    
+////////////////////////////////////////////////////////////////////////////////
+
+    require_once __DIR__ . '/vendor/autoload.php';
 	
 	process(is_array($argv) ? $argv : array());
 	
