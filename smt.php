@@ -113,6 +113,7 @@
   AddPreference('access_token','');
   AddPreference('auto_mkdir','1');
   AddPreference('col', '80');
+  AddPreference('client_token','7fb291c4d71851aee3a68f283d0c2d9b');
   AddPreference('dest_dir','');
   AddPreference('keyfile',"[datadir]sessionkeys.txt",'key');
   AddPreference('launch_exec','');
@@ -294,7 +295,7 @@
   ////////////////////////////////////////////////////////////////////////////////
   
   require_once('facebook/facebook.php');
-  require_once('facebook/facebook_desktop.php');
+  require_once('facebook/facebook_device.php');
   
   ////////////////////////////////////////////////////////////////////////////////
   
@@ -314,7 +315,14 @@
 ////////////////////////////////////////////////////////////////////////////////
   
   if ($smtCommand == 'AUTH') {
-    ValidateParamCount(1);
+    ValidateParamCount(0,1);
+      
+    try {
+        $fbDevice = new FacebookDevice($smtPrefs['appkey'], $smtPrefs['client_key']);
+        $fbDevice->login();
+    } catch (Exception $e) {
+        SmtException($e,'Invalid AUTH code / could not authorize session');
+    }
 /*
     try {
       $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
