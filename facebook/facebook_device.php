@@ -56,5 +56,5 @@
         array('access_token' => $this->api_key.'|'.$this->client_key,
               'scope' => 'public_profile,user_likes')));
     }
-  
+  }
 ?>
