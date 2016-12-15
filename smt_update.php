@@ -555,7 +555,7 @@
   function GetGithub($filename, $save = true) {
     global $branch;
     global $installLibDir;
-    $fileSrc = "https://raw.github.com/smartlogics-net/smt/{$branch}/{$filename}";
+    $fileSrc = "https://raw.githubusercontent.com/smartlogics-net/smt/{$branch}/{$filename}";
     $fileDest = "{$installLibDir}{$filename}";
     $fileContents = @file_get_contents($fileSrc);
     if ($fileContents) {
