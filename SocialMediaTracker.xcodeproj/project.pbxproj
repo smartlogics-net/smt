@@ -51,7 +51,8 @@
 		E90BA7CA1E0202BD00B7AA98 /* test_fb_connect.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_fb_connect.php; sourceTree = "<group>"; };
 		E90BA7CB1E0202BD00B7AA98 /* test_php.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = test_php.php; sourceTree = "<group>"; };
 		E90BA7CD1E02037400B7AA98 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		E93AD97B1DEC79CB00150CC7 /* SocialMediaTracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = SocialMediaTracker; path = /Users/hendrikl/workspace/SocialMediaTracker/smt/build/Debug/SocialMediaTracker; sourceTree = "<absolute>"; };
+		E95774461E02038C00270E14 /* SocialMediaTracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SocialMediaTracker; sourceTree = BUILT_PRODUCTS_DIR; };
+		E95774481E02162000270E14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +113,7 @@
 		E93AD9721DEC79CA00150CC7 = {
 			isa = PBXGroup;
 			children = (
+				E95774481E02162000270E14 /* Info.plist */,
 				E90BA7AD1E0202BD00B7AA98 /* composer-setup.php */,
 				E90BA7AE1E0202BD00B7AA98 /* composer.json */,
 				E90BA7AF1E0202BD00B7AA98 /* facebook */,
@@ -128,6 +130,7 @@
 				E90BA7C31E0202BD00B7AA98 /* smt_update.php */,
 				E90BA7C41E0202BD00B7AA98 /* smt.php */,
 				E90BA7C51E0202BD00B7AA98 /* support */,
+				E95774461E02038C00270E14 /* SocialMediaTracker */,
 			);
 			sourceTree = "<group>";
 		};
@@ -148,7 +151,7 @@
 			);
 			name = SocialMediaTracker;
 			productName = facebook.downloader;
-			productReference = E93AD97B1DEC79CB00150CC7 /* SocialMediaTracker */;
+			productReference = E95774461E02038C00270E14 /* SocialMediaTracker */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -290,10 +293,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = J44F4PUJEU;
+				INFOPLIST_FILE = "$(SRCROOT)/info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = net.smartlogics.SocialMediaTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "facebook.tracker/SocialMediaTracker-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -304,10 +311,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				DEVELOPMENT_TEAM = J44F4PUJEU;
+				INFOPLIST_FILE = "$(SRCROOT)/info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = net.smartlogics.SocialMediaTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "facebook.tracker/SocialMediaTracker-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
