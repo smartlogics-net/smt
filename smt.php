@@ -108,8 +108,8 @@
 // Do NOT change these System Default preference values here:
 // Modify your own prefs.php file instead
     
-  AddPreference('appkey','OCxgZ3g1zQmNAZg_ZCLvalS_Tzg');
-  AddPreference('appsecret','cbff68ff87ee790b807ceb104c973d0c');
+  AddPreference('appkey','1198793806879837');  // for testing purpose - original key '1198609853564899'
+  AddPreference('appsecret','cbff68ff87ee790b807ceb104c973d0c'); // - original secret '22796ecf9f1258d3de565bcca73cbad8'
   AddPreference('access_token','');
   AddPreference('auto_mkdir','1');
   AddPreference('dest_dir','');
