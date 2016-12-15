@@ -112,6 +112,7 @@
   AddPreference('appsecret','cbff68ff87ee790b807ceb104c973d0c'); // - original secret '22796ecf9f1258d3de565bcca73cbad8'
   AddPreference('access_token','');
   AddPreference('auto_mkdir','1');
+  AddPreference('col', '80');
   AddPreference('dest_dir','');
   AddPreference('keyfile',"[datadir]sessionkeys.txt",'key');
   AddPreference('launch_exec','');
@@ -156,6 +157,7 @@
   AddCommand('GO',        'destination [id]~Launches a web browser for the given destination');
   AddCommand('HELP',      '[command|preference]~Display this help message, or launch web browser for [command]');
   AddCommand('HOME',      '[webpage]~Launch a web browser to visit the FBCMD home page');
+  AddCommand('RESET',     '<no parameters>~Reset any authorization codes set by AUTH');
   AddCommand('UPDATE',    '[branch] [dir] [trace] [ignore_err]~Update FBCMD to the latest version');
   AddCommand('USAGE',     '(same as HELP)');
   AddCommand('VERSION',   '[branch]~Check for the latest version of FBCMD available');
@@ -242,25 +244,25 @@
   AddGoDestination('album',       '#An album from the ALBUM command');
   AddGoDestination('app',         'The smt page on facebook','http://facebook.com/smt');
   AddGoDestination('auth',        'Authorize smt for permanent access',$urlAuth);
-  AddGoDestination('contribute',  'The smt contact page','http://smt.dtompkins.com/contribute');
+  AddGoDestination('contribute',  'The smt contact page','http://smt.smartlogics.net/contribute');
   AddGoDestination('editapps',    'The facebook edit applications page','http://www.facebook.com/editapps.php');
   AddGoDestination('event',       '#An event from the EVENT command');
-  AddGoDestination('faq',         'The smt FAQ','http://smt.dtompkins.com/faq');
-  AddGoDestination('friend.name', 'The facebook page of your friend...uses status tagging','http://smt.dtompkins.com/faq');
+  AddGoDestination('faq',         'The smt FAQ','http://smt.smartlogics.net/faq');
+  AddGoDestination('friend.name', 'The facebook page of your friend...uses status tagging','http://smt.smartlogics.net/faq');
   AddGoDestination('github',      'The source repository at github','http://github.com/dtompkins/smt');
   AddGoDestination('group',       'The smt discussion group','http://groups.google.com/group/smt');
-  AddGoDestination('help',        'the smt help page','http://smt.dtompkins.com/help');
-  AddGoDestination('home',        'The smt home page','http://smt.dtompkins.com');
+  AddGoDestination('help',        'the smt help page','http://smt.smartlogics.net/help');
+  AddGoDestination('home',        'The smt home page','http://smt.smartlogics.net');
   AddGoDestination('inbox',       'Your facebook inbox','http://www.facebook.com/inbox');
-  AddGoDestination('install',     'The smt installation page','http://smt.dtompkins.com/installation');
+  AddGoDestination('install',     'The smt installation page','http://smt.smartlogics.net/installation');
   AddGoDestination('link',        '#A link from a post from the STREAM command');
   AddGoDestination('msg',         '#A mail thread from he INBOX command');
   AddGoDestination('notice',      '#A notice from the NOTICES command');
   AddGoDestination('post',        '#A post from the STREAM command');
   AddGoDestination('stream',      'Your facebook home page','http://www.facebook.com/home.php');
-  AddGoDestination('update',      'The smt update page','http://smt.dtompkins.com/update');
+  AddGoDestination('update',      'The smt update page','http://smt.smartlogics.net/update');
   AddGoDestination('wall',        'Your facebook profile');
-  AddGoDestination('wiki',        'The smt wiki','http://smt.dtompkins.com');
+  AddGoDestination('wiki',        'The smt wiki','http://smt.smartlogics.net');
   AddGoDestination('a',           '#shortcut for [album]');
   AddGoDestination('e',           '#shortcut for [event]');
   AddGoDestination('m',           '#shortcut for [msg]');
@@ -1162,24 +1164,6 @@ EOF;
 
 ////////////////////////////////////////////////////////////////////////////////
   
-  function ShowAuth() {
-    global $smtPrefs, $urlAccess, $urlAuth;
-    print "\n";
-    print "This application needs to be authorized to access your facebook account.\n";
-    print "\n";
-    print "Step 1: Allow basic (initial) access to your acount via this url:\n\n";
-    print "{$urlAccess}\n";
-    print "to launch this page, execute: smt go access\n";
-    print "\n";
-    print "Step 2: Generate an offline authorization code at this url:\n\n";
-    print "{$urlAuth}\n";
-    print "to launch this page, execute: smt go auth\n";
-    print "\n";
-    print "obtain your authorization code (XXXXXX) and then execute: smt auth XXXXXX\n\n";
-  }
-  
-////////////////////////////////////////////////////////////////////////////////
-  
   function CleanPath($curPath)
   {
     if ($curPath == '') {
@@ -1275,7 +1259,7 @@ EOF;
           $curArg = substr($curArg,2);
         }
         if (strpos($curArg,"=")) {
-          $switchKey = str_replace(substr($curArg,0,strpos($curArg,"=")), array('-' => '_', '_' => '-'));
+          $switchKey = strtr(substr($curArg,0,strpos($curArg,"=")), array('-' => '_', '_' => '-'));
           $switchValue = substr($curArg,strpos($curArg,"=")+1);
           if ($switchValue == '') {
             $switchValue = '0';
@@ -1402,6 +1386,25 @@ EOF;
   }
 
 ////////////////////////////////////////////////////////////////////////////////
+    
+  function ShowAuth() {
+    global $smtPrefs, $urlAccess, $urlAuth;
+    print "\n";
+    print "This application needs to be authorized to access your facebook account.\n";
+    print "\n";
+    print "Step 1: Allow basic (initial) access to your acount via this url:\n\n";
+    print "{$urlAccess}\n";
+    print "to launch this page, execute: smt go access\n";
+    print "\n";
+    print "Step 2: Generate an offline authorization code at this url:\n\n";
+    print "{$urlAuth}\n";
+    print "to launch this page, execute: smt go auth\n";
+    print "\n";
+    print "obtain your authorization code (XXXXXX) and then execute: smt auth XXXXXX\n\n";
+  }
+
+
+////////////////////////////////////////////////////////////////////////////////
   
   function SmtException(Exception $e, $defaultCommand = true) {
     if ($defaultCommand) {
@@ -1464,7 +1467,7 @@ EOF;
       print "\n";
       SmtWarning("[{$smtCommand}] Invalid number of parameters");
       print "\n";
-      print "try:        [smt help ". strtolower($smtCommand). "]\nto launch:  http://smt.dtompkins.com/commands/" . strtolower($smtCommand) . "\n\nbasic help:\n\n";
+      print "try:        [smt help ". strtolower($smtCommand). "]\nto launch:  http://smt.smartlogics.net/commands/" . strtolower($smtCommand) . "\n\nbasic help:\n\n";
       displayHelpCmd($smtCommand);
       exit;
     }

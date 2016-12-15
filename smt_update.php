@@ -336,7 +336,7 @@
   } else {
     $contentsBatch = "#! /bin/bash\n";
     $contentsBatch .= "# *** {$comment}\n";
-    $contentsBatch .= "php \"$mainFile\" \"$@\" -col=$(tput cols)\n";
+    $contentsBatch .= "php \"$mainFile\" \"$@\" --col=$(tput cols)\n";
   }
 
   $isMakeScript = false;
