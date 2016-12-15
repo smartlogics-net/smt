@@ -1160,7 +1160,7 @@ EOF;
 ////////////////////////////////////////////////////////////////////////////////
   
   function AddCommand($cmd,$help) {
-    global $smtdCommandList;
+    global $smtCommandList;
     global $smtCommandHelp;
     $smtCommandList[] = $cmd;
     $smtCommandHelp[$cmd] = $help;
