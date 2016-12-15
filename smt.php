@@ -374,9 +374,9 @@
   ////////////////////////////////////////////////////////////////////////////////
   
   // create the Facebook Object
-  
+  /*
   try {
-    $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtdPrefs['appsecret']);
+    $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
     $fbObject->api_client->session_key = $smtUserSessionKey;
     $fbObject->secret = $smtUserSecretKey;
     $fbObject->api_client->secret = $smtUserSecretKey;
@@ -384,6 +384,7 @@
   } catch (Exception $e) {
     SmtException($e,'Could not use session key / log in user');
   }
+  */
   
 ////////////////////////////////////////////////////////////////////////////////
 
