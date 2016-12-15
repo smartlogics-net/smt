@@ -865,7 +865,9 @@ EOF;
 	 */
 	function download($version, $destDir, $object, $quiet, $disableTls, $accessToken, $channel)
 	{
-		$destPath = (is_dir($destDir) ? rtrim($destDir, '/').'/' : '') . $object;
+        global $smtPrefs;
+        
+        $destPath = (is_dir($destDir) ? rtrim($destDir, '/').'/' : '') . $object;
 		$destDir  = realpath($destDir) ? realpath($destDir) : getcwd();
 		$dir      = $destDir.DIRECTORY_SEPARATOR.$object;
 		
