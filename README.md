@@ -43,3 +43,8 @@ See http://smt.smartlogics.net/history/ for a revision history.
 
 ## To get involved in the project, or get some help:
 - [Contribute]    (http://smt.smartlogics.net/contribute)
+
+## Installation
+```
+curl -sSL https://raw.github.com/smartlogics-net/smt/master/smt_update.php | php -- install
+```
