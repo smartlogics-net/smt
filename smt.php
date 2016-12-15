@@ -1325,6 +1325,101 @@ EOF;
     }
   }
 
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  function PrintFinish() {
+    global $smtPrefs;
+    global $printMatrix;
+    if ($smtPrefs['print_csv']) {
+      return;
+    }
+    if (isset($printMatrix)) {
+      $columnWidth = Array();
+      if (count($printMatrix) > 0) {
+        foreach ($printMatrix as $row) {
+          while (count($row) > count($columnWidth)) {
+            $columnWidth[] = 0;
+          }
+          for ($i=0; $i<count($row); $i++) {
+            if (strlen($row[$i])>$columnWidth[$i]) {
+              $columnWidth[$i]=strlen($row[$i]);
+            }
+          }
+        }
+        for ($i=0; $i<count($columnWidth)-1; $i++) {
+          $columnWidth[$i] += $smtPrefs['print_col_padding'];
+        }
+        
+        if ($smtPrefs['print_wrap']) {
+          $consoleWidth = $smtPrefs['print_wrap_width'];
+          if ($smtPrefs['print_wrap_env_var']) {
+            if (getenv($smtPrefs['print_wrap_env_var'])) {
+              $consoleWidth = getenv($smtPrefs['print_wrap_env_var']);
+            }
+          }
+          $colToWrap = count($columnWidth) - 1;
+          $wrapWidth = $consoleWidth - array_sum($columnWidth) + $columnWidth[$colToWrap] - 1;
+          if ($wrapWidth < $smtPrefs['print_wrap_min_width']) {
+            $wrapWidth = $columnWidth[$colToWrap]+1;
+          }
+          $backupMatrix = $printMatrix;
+          $printMatrix = array();
+          foreach ($backupMatrix as $row) {
+            if (isset($row[$colToWrap])) {
+              $rightCol = array_pop($row);
+              $wrapped = wordwrap($rightCol,$wrapWidth,"\n",$smtPrefs['print_wrap_cut']);
+              $newRows = explode("\n",$wrapped);
+              foreach ($newRows as $nr) {
+                $addRow = $row;
+                array_push($addRow,$nr);
+                $printMatrix[] = CleanColumns($addRow);
+              }
+            } else {
+              $printMatrix[] = $row;
+            }
+          }
+        } else {
+          if ($smtPrefs['print_linefeed_subst']) {
+            $colToWrap = count($columnWidth) - 1;
+            for ($j=0; $j < count($printMatrix); $j++) {
+              if (isset($printMatrix[$j][$colToWrap])) {
+                $printMatrix[$j][$colToWrap] = str_replace("\n", $smtPrefs['print_linefeed_subst'], $printMatrix[$j][$colToWrap]);
+              }
+            }
+          }
+        }
+        
+        foreach ($printMatrix as $row) {
+          for ($i=0; $i<count($row); $i++) {
+            if ($i < count($row)-1) {
+              print str_pad($row[$i], $columnWidth[$i], ' ');
+            } else {
+              print $row[$i];
+            }
+          }
+          print "\n";
+        }
+      }
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function PrintFolderHeader() {
+    global $smtPrefs;
+    $threadInfo = array();
+    if ($smtPrefs['mail_save']) {
+      $threadInfo[] = '[#]';
+    }
+    if ($smtPrefs['folder_show_threadid']) {
+      $threadInfo[] = 'THREAD_ID';
+    }
+    PrintHeader($threadInfo,'FIELD','VALUE');
+    if ($smtPrefs['folder_blankrow']) {
+      PrintRow('');
+    }
+  }
+
 ////////////////////////////////////////////////////////////////////////////////
   
   function SmtException(Exception $e, $defaultCommand = true) {
