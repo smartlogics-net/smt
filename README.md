@@ -1,5 +1,25 @@
-# smt
-Social Media Tracker
+# Social Media Tracker
+////////////////////////////////////////////////////////////////////////////////
+//                     _                                                      //
+//                    | |                                                     //
+//    ____ _ __ ___  _| |_                                                    //
+//   / ___| '_ ` _ \|_   _|                                                   //
+//   \__ \| | | | | | | |_                                                    //
+//   |___/|_| |_| |_|  \__|                                                   //
+//                                                                            //
+//   Social Media Tracker Utility                                             //
+//                                                                            //
+//   http://smt.smartlogics.net                                               //
+//                                                                            //
+//   [Project Home Page]      http://voicelink-velia.firewall-gateway.net/smt //
+//   [Facebook Page]          http://facebook.com/smt                         //
+//   [Discussion Group]       http://groups.google.com/group/smt              //
+//   [Open Source Repository] http://github.com/smartlogics-net/smt           //
+//                                                                            //
+//   Copyright (c) 2016 SmartLogics Software & Consulting GmbH                //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 [http://smt.smartlogics.net]
 
 - [Project Home Page]      http://voicelink-velia.firewall-gateway.net/smt
