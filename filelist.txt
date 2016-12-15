@@ -17,6 +17,7 @@ gpl.txt         # GNU General Public License
 facebook/facebook.php
 facebook/facebookapi_php5_restlib.php
 facebook/facebook_desktop.php
+facebook/facebook_device.php
 facebook/facebook_mobile.php
 facebook/jsonwrapper/jsonwrapper.php
 facebook/jsonwrapper/jsonwrapper_inner.php
