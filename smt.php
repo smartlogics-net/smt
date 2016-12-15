@@ -36,11 +36,11 @@
 //   Having said all that, the author would love you to send him:             //
 //   Suggestions,  Modifications and Improvements for re-distribution.        //
 //                                                                            //
-//   http://fbcmd.dtompkins.com/contribute                                    //
+//   http://smt.smartlogics.net/contribute                                    //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//   http://fbcmd.dtompkins.com/history for a revision history.               //
+//   http://smt.smartlogics.net/history for a revision history.               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -114,7 +114,7 @@
 	function displayHelp()
 	{
 		echo <<<EOF
-		Facebook Downloader
+		Facebook SMT Downloader
 		------------------
 		Options
 		--help               this help
@@ -537,7 +537,33 @@ EOF;
 		
 		if (! isset($accessToken)) {
 			echo 'No OAuth data could be obtained from the signed request. User has not authorized your app yet.';
-			#exit;
+
+            try {
+                $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
+                $session = $fbObject->do_get_session($smtParams[1]);
+                TraceReturn($session);
+            } catch (Exception $e) {
+                FbcmdException($e,'Invalid AUTH code / could not authorize session');
+            }
+            $smtUserSessionKey = $session['session_key'];
+            $smtUserSecretKey = $session['secret'];
+            VerifyOutputDir($smtKeyFileName);
+            if (@file_put_contents ($smtKeyFileName,"{$smtUserSessionKey}\n{$smtUserSecretKey}\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
+                FbcmdFatalError("Could not generate keyfile {$smtKeyFileName}");
+            }
+            try {
+                $fbObject->api_client->session_key = $smtUserSessionKey;
+                $fbObject->secret = $smtUserSecretKey;
+                $fbObject->api_client->secret = $smtUserSecretKey;
+                $fbUser = $fbObject->api_client->users_getLoggedInUser();
+                $fbReturn = $fbObject->api_client->users_getInfo($fbUser,array('name'));
+                TraceReturn($fbReturn);
+            } catch (Exception $e) {
+                FbcmdException($e,'Invalid AUTH code / could not generate session key');
+            }
+            if (!$smtPrefs['quiet']) {
+                print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT, {$fbReturn[0]['name']}!\n\n";
+            }
 		}
 
 		// Logged in
