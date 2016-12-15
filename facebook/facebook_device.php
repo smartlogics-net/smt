@@ -52,9 +52,9 @@
     }
     
     public function login() {
-      var_dump($this->api_client->call_method('',
+      return $this->api_client->call_method('',
         array('access_token' => $this->api_key.'|'.$this->client_key,
-              'scope' => 'public_profile,user_likes')));
+              'scope' => 'public_profile,user_likes'));
     }
   }
 ?>

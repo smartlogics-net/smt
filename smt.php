@@ -319,7 +319,8 @@
       
     try {
         $fbDevice = new FacebookDevice($smtPrefs['appkey'], $smtPrefs['client_key']);
-        $fbDevice->login();
+        $fbReturn = $fbDevice->login();
+        var_dump($fbReturn);
     } catch (Exception $e) {
         SmtException($e,'Invalid AUTH code / could not authorize session');
     }
@@ -339,11 +340,6 @@
       FbcmdFatalError("Could not generate keyfile {$smtKeyFileName}");
     }
     try {
-      $fbObject->api_client->session_key = $smtUserSessionKey;
-      $fbObject->secret = $smtUserSecretKey;
-      $fbObject->api_client->secret = $smtUserSecretKey;
-      $fbUser = $fbObject->api_client->users_getLoggedInUser();
-      $fbReturn = $fbObject->api_client->users_getInfo($fbUser,array('name'));
       TraceReturn($fbReturn);
     } catch (Exception $e) {
       FbcmdException($e,'Invalid AUTH code / could not generate session key');

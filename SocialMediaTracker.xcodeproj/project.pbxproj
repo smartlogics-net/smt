@@ -53,6 +53,7 @@
 		E90BA7CD1E02037400B7AA98 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		E95774461E02038C00270E14 /* SocialMediaTracker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SocialMediaTracker; sourceTree = BUILT_PRODUCTS_DIR; };
 		E95774481E02162000270E14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E99A6AE01E02A6CA002430D8 /* facebook_device.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = facebook_device.php; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +72,7 @@
 			children = (
 				E90BA7B01E0202BD00B7AA98 /* facebook.php */,
 				E90BA7B11E0202BD00B7AA98 /* facebook_desktop.php */,
+				E99A6AE01E02A6CA002430D8 /* facebook_device.php */,
 				E90BA7B21E0202BD00B7AA98 /* facebook_mobile.php */,
 				E90BA7B31E0202BD00B7AA98 /* facebookapi_php5_restlib.php */,
 				E90BA7B41E0202BD00B7AA98 /* jsonwrapper */,
