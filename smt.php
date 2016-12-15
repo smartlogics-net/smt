@@ -315,6 +315,7 @@
   
   if ($smtCommand == 'AUTH') {
     ValidateParamCount(1);
+/*
     try {
       $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
       $session = $fbObject->do_get_session($smtParams[1]);
@@ -322,6 +323,7 @@
     } catch (Exception $e) {
       SmtException($e,'Invalid AUTH code / could not authorize session');
     }
+*/
     $smtUserSessionKey = $session['session_key'];
     $smtUserSecretKey = $session['secret'];
     VerifyOutputDir($smtKeyFileName);
@@ -346,7 +348,7 @@
     return;
   }
   
-  ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   
   if (!file_exists($smtKeyFileName)) {
     print "\n";
@@ -357,7 +359,7 @@
     return;
   }
   
-  ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
   
   $smtKeyFile = file($smtKeyFileName,FILE_IGNORE_NEW_LINES);
   if (count($smtKeyFile) < 2) {
