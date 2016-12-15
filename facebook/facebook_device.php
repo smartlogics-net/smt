@@ -39,21 +39,21 @@
    */
   class FacebookDevice {
     // the application secret, which differs from the session secret
-    public $api_key;
-    public $client_key;
+    public $app_key;
+    public $client_token;
     public $verify_sig;
     
-    public function __construct($api_key, $client_key) {
-      $this->api_key = $api_key;
-      $this->client_key = $client_key;
+    public function __construct($api_key, $client_token) {
+      $this->app_key = $app_key;
+      $this->client_token = $client_token;
       $this->verify_sig = false;
-      $this->api_client = new FacebookRestClient($api_key, '', null);
+      $this->api_client = new FacebookRestClient($app_key, '', null);
       $this->api_client->server_addr = Facebook::get_facebook_url('graph').'/v2.6/device/login';
     }
     
     public function login() {
       var_dump($this->api_client->call_method('',
-        array('access_token' => $this->api_key.'|'.$this->client_key,
+        array('access_token' => $this->app_key.'|'.$this->client_token,
               'scope' => 'public_profile,user_likes')));
     }
   }
