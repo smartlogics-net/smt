@@ -1209,6 +1209,21 @@ EOF;
   
 ////////////////////////////////////////////////////////////////////////////////
   
+  function CleanPath($curPath)
+  {
+    if ($curPath == '') {
+      return './';
+    } else {
+      $curPath = str_replace('\\', '/', $curPath);
+      if ($curPath[strlen($curPath)-1] != '/') {
+        $curPath .= '/';
+      }
+    }
+    return $curPath;
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
   function GetGithubVersion($branch = 'master') {
     try {
       $phpFile = @file_get_contents("http://github.com/smartlogics-net/smt/raw/{$branch}/smt.php");
