@@ -118,6 +118,7 @@
   AddPreference('mkdir_mode',0777);
   AddPreference('object','');
   AddPreference('prefs','');
+  AddPreference('print_csv','0','csv');
   AddPreference('quiet','0','q');
   AddPreference('show_id','0','id');
   AddPreference('trace','0','t');
@@ -1333,6 +1334,7 @@ EOF;
     if ($smtPrefs['print_csv']) {
       return;
     }
+    /*
     if (isset($printMatrix)) {
       $columnWidth = Array();
       if (count($printMatrix) > 0) {
@@ -1401,6 +1403,7 @@ EOF;
         }
       }
     }
+    */
   }
   
 ////////////////////////////////////////////////////////////////////////////////
