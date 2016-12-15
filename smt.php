@@ -315,8 +315,9 @@
 ////////////////////////////////////////////////////////////////////////////////
   
   if ($smtCommand == 'AUTH') {
-    ValidateParamCount(0,1);
+    ValidateParamCount(1);
       
+/*
     try {
         $fbDevice = new FacebookDevice($smtPrefs['appkey'], $smtPrefs['client_key']);
         $fbReturn = $fbDevice->login();
@@ -333,19 +334,20 @@
       SmtException($e,'Invalid AUTH code / could not authorize session');
     }
 */
-    $smtUserSessionKey = $session['session_key'];
-    $smtUserSecretKey = $session['secret'];
+    $smtUserSessionKey = 'SESSION_KEY'; //$session['session_key'];
+    $smtUserSecretKey = $smtPrefs['access_token']; //$session['secret'];
     VerifyOutputDir($smtKeyFileName);
     if (@file_put_contents ($smtKeyFileName,"{$smtUserSessionKey}\n{$smtUserSecretKey}\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
       FbcmdFatalError("Could not generate keyfile {$smtKeyFileName}");
     }
     try {
+      $fbReturn = $smtUserSecretKey;
       TraceReturn($fbReturn);
     } catch (Exception $e) {
       FbcmdException($e,'Invalid AUTH code / could not generate session key');
     }
     if (!$smtPrefs['quiet']) {
-      print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT, {$fbReturn[0]['name']}!\n\n";
+      print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT!"; //, {$fbReturn[0]['name']}!\n\n";
       print "most SMT commands require additional permissions.\n";
       print "to grant default permissions, execute: smt addperm\n";
     }
@@ -356,7 +358,7 @@
   
   if (!file_exists($smtKeyFileName)) {
     print "\n";
-    print "Welcome to smt! [version $smtVersion]\n\n";
+    print "Welcome to SMT! [version $smtVersion]\n\n";
     //print "It appears to be the first time you are running the application\n";
     //print "as smt could not locate your keyfile: [{$smtKeyFileName}]\n\n";
     ShowAuth();
