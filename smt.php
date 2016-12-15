@@ -415,7 +415,7 @@
 			exit(0);
 		}
 
-    $auth        = in_array('--auth', $argv);
+        $auth        = in_array('--auth', $argv);
 		$check       = in_array('--check', $argv);
 		$help        = in_array('--help', $argv);
 		$force       = in_array('--force', $argv);
@@ -425,7 +425,7 @@
 		$destDir     = getOptValue('--dest-dir', $argv, '..');
 		$version     = getOptValue('--version', $argv, false);
 		$object      = getOptValue('--object', $argv, 'me');
-		$accessToken = getOptValue('--access-token', $argv, false);
+		$accessToken = getOptValue('--access-token', $argv, $GLOBALS['smtUserSecretKey']);
 		$cafile      = getOptValue('--cafile', $argv, false);
 		
 		if (!checkParams($destDir, $version, $accessToken)) {
@@ -899,38 +899,8 @@ EOF;
 			}
 		}
 		
-		if (! isset($accessToken)) {
+		if (! isset($accessToken) || $accessToken === false) {
 			echo 'No OAuth data could be obtained from the signed request. User has not authorized your app yet.';
-
-            require_once('facebook/facebook.php');
-            require_once('facebook/facebook_desktop.php');
-
-            try {
-                $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
-                $session = $fbObject->do_get_session($smtParams[1]);
-                TraceReturn($session);
-            } catch (Exception $e) {
-                SmtException($e,'Invalid AUTH code / could not authorize session');
-            }
-            $smtUserSessionKey = $session['session_key'];
-            $smtUserSecretKey = $session['secret'];
-            VerifyOutputDir($smtKeyFileName);
-            if (@file_put_contents ($smtKeyFileName,"{$smtUserSessionKey}\n{$smtUserSecretKey}\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
-                SmtFatalError("Could not generate keyfile {$smtKeyFileName}");
-            }
-            try {
-                $fbObject->api_client->session_key = $smtUserSessionKey;
-                $fbObject->secret = $smtUserSecretKey;
-                $fbObject->api_client->secret = $smtUserSecretKey;
-                $fbUser = $fbObject->api_client->users_getLoggedInUser();
-                $fbReturn = $fbObject->api_client->users_getInfo($fbUser,array('name'));
-                TraceReturn($fbReturn);
-            } catch (Exception $e) {
-                SmtException($e,'Invalid AUTH code / could not generate session key');
-            }
-            if (!$smtPrefs['quiet']) {
-                print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT, {$fbReturn[0]['name']}!\n\n";
-            }
 		}
 
 		// Logged in
