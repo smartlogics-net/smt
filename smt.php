@@ -49,13 +49,339 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
     
-    $smtVersion = '1.0';
+    $smtVersion = '1.1';
     
 ////////////////////////////////////////////////////////////////////////////////
 
     require_once __DIR__ . '/vendor/autoload.php';
 	
-	process(is_array($argv) ? $argv : array());
+////////////////////////////////////////////////////////////////////////////////
+  
+// you can include smt.php from another program
+// see support/sample-mycmd.php for more information
+  
+  if (isset($smt_include)) {
+    ob_end_clean(); // this avoids displaying the #!/usr/bin/php when included
+    if ($smt_include_supressOutput) {
+      ob_start();
+    }
+  } else {
+    $smt_argv = $argv;
+    $smt_argc = $argc;
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+// set the default arguments to be empty
+  
+  $smtCommand = '';
+  $smtParams = Array();
+  $smtPrefs = Array();
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+// You can set an environment variable FBCMD to specify the location of
+// your peronal files: sessionkeys.txt, prefs.php, postdata.txt, maildata.txt
+  
+// Defaults: Windows:          %USERPROFILE%\smt\ (c:\Users\YOURUSERNAME\smt\)
+// Defaults: Mac/Linux/Other:  $HOME/.smt/        (~/.smt/)
+  
+  $smtBaseDir = getenv('SMT');
+  if ($smtBaseDir) {
+    $smtBaseDir = CleanPath($smtBaseDir);
+  } else {
+    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+      if (getenv('USERPROFILE')) {
+        $smtBaseDir = CleanPath(getenv('USERPROFILE')) . 'smt/';
+      } else {
+        $smtBaseDir = 'c:/smt/';
+      }
+    } else {
+      $smtBaseDir = CleanPath(getenv('HOME')) . '.smt/';
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+// This section sets your preferences
+// see http://smt.smartlogics.net/preferences for more information
+// STEP ONE: System Defaults
+// Do NOT change these System Default preference values here:
+// Modify your own prefs.php file instead
+    
+  AddPreference('appkey','OCxgZ3g1zQmNAZg_ZCLvalS_Tzg');
+  AddPreference('appsecret','cbff68ff87ee790b807ceb104c973d0c');
+  AddPreference('access_token','');
+  AddPreference('auto_mkdir','1');
+  AddPreference('dest_dir','');
+  AddPreference('keyfile',"[datadir]sessionkeys.txt",'key');
+  AddPreference('launch_exec','');
+  AddPreference('mkdir_mode',0777);
+  AddPreference('object','');
+  AddPreference('prefs','');
+  AddPreference('quiet','0','q');
+  AddPreference('show_id','0','id');
+  AddPreference('trace','0','t');
+  AddPreference('update_branch','master');
+
+  // STEP TWO: Load preferences from prefs.php in the base directory
+  
+  if (file_exists("{$smtBaseDir}prefs.php")) {
+    include("{$smtBaseDir}prefs.php");
+  }
+  
+  // STEP THREE: Read switches set from the command line
+  // This also sets $smtCommand & $smtParams
+  
+  ParseArguments($smt_argv,$smt_argc);
+  
+  // STEP FOUR: if a "--prefs=filename.php" was specified
+  
+  if ($smtPrefs['prefs']) {
+    if (file_exists($smtPrefs['prefs'])) {
+      include($fsmtPrefs['prefs']);
+    } else {
+      SmtWarning("Could not load Preferences file {$smtPrefs['prefs']}");
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  $smtCommandList = array();
+
+  AddCommand('AUTH',      'authcode~Sets your facebook authorization code for offline access');
+  AddCommand('GO',        'destination [id]~Launches a web browser for the given destination');
+  AddCommand('HELP',      '[command|preference]~Display this help message, or launch web browser for [command]');
+  AddCommand('HOME',      '[webpage]~Launch a web browser to visit the FBCMD home page');
+  AddCommand('UPDATE',    '[branch] [dir] [trace] [ignore_err]~Update FBCMD to the latest version');
+  AddCommand('USAGE',     '(same as HELP)');
+  AddCommand('VERSION',   '[branch]~Check for the latest version of FBCMD available');
+  AddCommand('WHOAMI',    '<no parameters>~Display the currently authorized user');
+  
+  if (isset($smt_include_newCommands)) {
+    foreach ($smt_include_newCommands as $c) {
+      AddCommand($c[0],$c[1]);
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  if (!in_array($smtCommand,$smtCommandList)&&($smtCommand != '')) {
+    SmtFatalError("Unknown Command: [{$smtCommand}] try smt HELP");
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  if (($smtCommand == 'HELP')||($smtCommand == 'USAGE')) {
+    ValidateParamCount(0,1);
+    if (ParamCount() == 0) {
+      displayHelp();
+    }
+    if (in_array(strtoupper($smtParams[1]),$smtCommandList)) {
+      LaunchBrowser('http://smt.smartlogics.net/commands/' . strtolower($smtParams[1]));
+      return;
+    }
+    if (isset($smtPrefs[$smtParams[1]])) {
+      LaunchBrowser('http://smt.smartlogics.net/preferences/' . strtolower($smtParams[1]));
+      return;
+    }
+    SmtWarning("HELP: did not recognize [{$smtParams[1]}]");
+    displayHelp();
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  if ($smtCommand == 'UPDATE') {
+    ValidateParamCount(0,4);
+    $updatePhp = CleanPath(realpath(dirname($argv[0]))) . 'smt_update.php';
+    if (!file_exists($updatePhp)) {
+      $updatePhpAlt = CleanPath(realpath($smtPrefs['install_dir'])) . 'smt_update.php';
+      if (file_exists($updatePhpAlt)) {
+        $updatePhp = $updatePhpAlt;
+      } else {
+        FbcmdFatalError("Could not locate [{$updatePhp}]");
+      }
+    }
+    $execCmd = "php \"$updatePhp\"";
+    if (ParamCount() >= 1) {
+      $execCmd .= " \"{$smtParams[1]}\"";
+    }
+    if (ParamCount() >= 2) {
+      $execCmd .= " \"{$smtParams[2]}\"";
+    }
+    if (ParamCount() >= 3) {
+      $execCmd .= " {$smtParams[3]}";
+    }
+    if (ParamCount() >= 4) {
+      $execCmd .= " {$smtParams[4]}";
+    }
+    passthru($execCmd);
+    return;
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  if ($smtCommand == 'HOME') {
+    ValidateParamCount(0,1);
+    SetDefaultParam(1,'');
+    LaunchBrowser('http://smt.smartlogics.net/' . strtolower($smtParams[1]));
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  $urlAuth = "http://www.facebook.com/code_gen.php?v=1.0&api_key={$smtPrefs['appkey']}";
+  $urlAccess = "https://www.facebook.com/dialog/oauth?client_id={$smtPrefs['appkey']}&redirect_uri=http://www.facebook.com/connect/login_success.html";
+
+  $goDestinations = array();
+  $goDestinationsHelp = array();
+  $goDestinationsUrl = array();
+  
+  AddGoDestination('access',      'Allow smt to (initially) access your account',$urlAccess);
+  AddGoDestination('album',       '#An album from the ALBUM command');
+  AddGoDestination('app',         'The smt page on facebook','http://facebook.com/smt');
+  AddGoDestination('auth',        'Authorize smt for permanent access',$urlAuth);
+  AddGoDestination('contribute',  'The smt contact page','http://smt.dtompkins.com/contribute');
+  AddGoDestination('editapps',    'The facebook edit applications page','http://www.facebook.com/editapps.php');
+  AddGoDestination('event',       '#An event from the EVENT command');
+  AddGoDestination('faq',         'The smt FAQ','http://smt.dtompkins.com/faq');
+  AddGoDestination('friend.name', 'The facebook page of your friend...uses status tagging','http://smt.dtompkins.com/faq');
+  AddGoDestination('github',      'The source repository at github','http://github.com/dtompkins/smt');
+  AddGoDestination('group',       'The smt discussion group','http://groups.google.com/group/smt');
+  AddGoDestination('help',        'the smt help page','http://smt.dtompkins.com/help');
+  AddGoDestination('home',        'The smt home page','http://smt.dtompkins.com');
+  AddGoDestination('inbox',       'Your facebook inbox','http://www.facebook.com/inbox');
+  AddGoDestination('install',     'The smt installation page','http://smt.dtompkins.com/installation');
+  AddGoDestination('link',        '#A link from a post from the STREAM command');
+  AddGoDestination('msg',         '#A mail thread from he INBOX command');
+  AddGoDestination('notice',      '#A notice from the NOTICES command');
+  AddGoDestination('post',        '#A post from the STREAM command');
+  AddGoDestination('stream',      'Your facebook home page','http://www.facebook.com/home.php');
+  AddGoDestination('update',      'The smt update page','http://smt.dtompkins.com/update');
+  AddGoDestination('wall',        'Your facebook profile');
+  AddGoDestination('wiki',        'The smt wiki','http://smt.dtompkins.com');
+  AddGoDestination('a',           '#shortcut for [album]');
+  AddGoDestination('e',           '#shortcut for [event]');
+  AddGoDestination('m',           '#shortcut for [msg]');
+  AddGoDestination('n',           '#shortcut for [notice]');
+  AddGoDestination('p',           '#shortcut for [post]');
+  AddGoDestination('l',           '#shortcut for [link]');
+
+  if ($smtCommand == 'GO') {
+    if (ParamCount() == 0) {
+      print "\nGO Destinations:\n\n";
+      foreach ($goDestinations as $key) {
+        $desc = $goDestinationsHelp[$key];
+        if (substr($desc,0,1) == "#") {
+          print str_pad("  go {$key} id",19,' ') . substr($desc,1) . "\n";
+        } else {
+          print str_pad("  go {$key}",19,' ') . $desc . "\n";
+        }
+      }
+      print "\n";
+      return;
+    } else {
+      if (isset($goDestinationsUrl[strtolower($smtParams[1])])) {
+        LaunchBrowser($goDestinationsUrl[strtolower($smtParams[1])]);
+        return;
+      }
+    }
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  require_once('facebook/facebook.php');
+  require_once('facebook/facebook_desktop.php');
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  $smtKeyFileName = str_replace('[datadir]',$smtBaseDir,$smtPrefs['keyfile']);
+  
+  if ($smtCommand == 'RESET') {
+    ValidateParamCount(0);
+    VerifyOutputDir($smtKeyFileName);
+    if (@file_put_contents($smtKeyFileName,"EMPTY\nEMPTY\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
+      SmtFatalError("Could not generate keyfile {$smtKeyFileName}");
+    }
+    if (!$smtPrefs['quiet']) {
+      print "keyfile {$smtKeyFileName} has been RESET\n";
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  if ($smtCommand == 'AUTH') {
+    ValidateParamCount(1);
+    try {
+      $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
+      $session = $fbObject->do_get_session($smtParams[1]);
+      TraceReturn($session);
+    } catch (Exception $e) {
+      SmtException($e,'Invalid AUTH code / could not authorize session');
+    }
+    $smtUserSessionKey = $session['session_key'];
+    $smtUserSecretKey = $session['secret'];
+    VerifyOutputDir($smtKeyFileName);
+    if (@file_put_contents ($smtKeyFileName,"{$smtUserSessionKey}\n{$smtUserSecretKey}\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
+      FbcmdFatalError("Could not generate keyfile {$smtKeyFileName}");
+    }
+    try {
+      $fbObject->api_client->session_key = $smtUserSessionKey;
+      $fbObject->secret = $smtUserSecretKey;
+      $fbObject->api_client->secret = $smtUserSecretKey;
+      $fbUser = $fbObject->api_client->users_getLoggedInUser();
+      $fbReturn = $fbObject->api_client->users_getInfo($fbUser,array('name'));
+      TraceReturn($fbReturn);
+    } catch (Exception $e) {
+      FbcmdException($e,'Invalid AUTH code / could not generate session key');
+    }
+    if (!$smtPrefs['quiet']) {
+      print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT, {$fbReturn[0]['name']}!\n\n";
+      print "most SMT commands require additional permissions.\n";
+      print "to grant default permissions, execute: smt addperm\n";
+    }
+    return;
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  if (!file_exists($smtKeyFileName)) {
+    print "\n";
+    print "Welcome to smt! [version $smtVersion]\n\n";
+    //print "It appears to be the first time you are running the application\n";
+    //print "as smt could not locate your keyfile: [{$smtKeyFileName}]\n\n";
+    ShowAuth();
+    return;
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  $smtKeyFile = file($smtKeyFileName,FILE_IGNORE_NEW_LINES);
+  if (count($smtKeyFile) < 2) {
+    SmtFatalError("Invalid keyfile {$smtKeyFileName}");
+  }
+  $smtUserSessionKey = $smtKeyFile[0];
+  $smtUserSecretKey = $smtKeyFile[1];
+  
+  if (strncmp($smtUserSessionKey,'EMPTY',5) == 0) {
+    ShowAuth();
+    return;
+  }
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  
+  // create the Facebook Object
+  
+  try {
+    $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtdPrefs['appsecret']);
+    $fbObject->api_client->session_key = $smtUserSessionKey;
+    $fbObject->secret = $smtUserSecretKey;
+    $fbObject->api_client->secret = $smtUserSecretKey;
+    $fbUser = $fbObject->api_client->users_getLoggedInUser();
+  } catch (Exception $e) {
+    SmtException($e,'Could not use session key / log in user');
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  process(is_array($smt_argv) ? $smt_argv : array());
 	
 	/**
 	 * processes the downloader
@@ -69,7 +395,8 @@
 			displayHelp();
 			exit(0);
 		}
-		
+
+    $auth        = in_array('--auth', $argv);
 		$check       = in_array('--check', $argv);
 		$help        = in_array('--help', $argv);
 		$force       = in_array('--force', $argv);
@@ -136,8 +463,26 @@
 		--cafile="..."       accepts a path to a Certificate Authority (CA) certificate file for SSL/TLS verification
 EOF;
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  function displayHelpCmd($cmd) {
+    global $smtCommandList;
+    global $smtCommandHelp;
+    
+    if (!isset($smtCommandHelp[$cmd])) {
+      $smtCommandHelp[$cmd] = "[No Help Available]\n";
+    }
+    $helpText = explode('~',$smtCommandHelp[$cmd]);
+    print "  " . str_pad($cmd, 10, ' ') . $helpText[0]. "\n";
+    for ($j=1; $j < count($helpText); $j++) {
+      print "            " . $helpText[$j] . "\n";
+    }
+    print "\n";
+  }
 	
-	/**
+////////////////////////////////////////////////////////////////////////////////
+  /**
 	 * Sets the USE_ANSI define for colorizing output
 	 *
 	 * @param array $argv Command-line arguments
@@ -514,8 +859,8 @@ EOF;
 		}
 
 		$facebook = new Facebook\Facebook([
-										  'app_id' => 'OCxgZ3g1zQmNAZg_ZCLvalS_Tzg',
-										  'app_secret' => 'cbff68ff87ee790b807ceb104c973d0c',
+										  'app_id' => $smtPrefs['appkey'],
+										  'app_secret' => $smtPrefs['appsecret'],
 										  'default_graph_version' => 'v2.8',
 										  ]);
 		
@@ -538,18 +883,21 @@ EOF;
 		if (! isset($accessToken)) {
 			echo 'No OAuth data could be obtained from the signed request. User has not authorized your app yet.';
 
+            require_once('facebook/facebook.php');
+            require_once('facebook/facebook_desktop.php');
+
             try {
                 $fbObject = new FacebookDesktop($smtPrefs['appkey'], $smtPrefs['appsecret']);
                 $session = $fbObject->do_get_session($smtParams[1]);
                 TraceReturn($session);
             } catch (Exception $e) {
-                FbcmdException($e,'Invalid AUTH code / could not authorize session');
+                SmtException($e,'Invalid AUTH code / could not authorize session');
             }
             $smtUserSessionKey = $session['session_key'];
             $smtUserSecretKey = $session['secret'];
             VerifyOutputDir($smtKeyFileName);
             if (@file_put_contents ($smtKeyFileName,"{$smtUserSessionKey}\n{$smtUserSecretKey}\n# only the first two lines of this file are read\n# use smt RESET to replace this file\n") == false) {
-                FbcmdFatalError("Could not generate keyfile {$smtKeyFileName}");
+                SmtFatalError("Could not generate keyfile {$smtKeyFileName}");
             }
             try {
                 $fbObject->api_client->session_key = $smtUserSessionKey;
@@ -559,7 +907,7 @@ EOF;
                 $fbReturn = $fbObject->api_client->users_getInfo($fbUser,array('name'));
                 TraceReturn($fbReturn);
             } catch (Exception $e) {
-                FbcmdException($e,'Invalid AUTH code / could not generate session key');
+                SmtException($e,'Invalid AUTH code / could not generate session key');
             }
             if (!$smtPrefs['quiet']) {
                 print "\nsmt [v$smtVersion] AUTH Code accepted.\nWelcome to SMT, {$fbReturn[0]['name']}!\n\n";
@@ -789,5 +1137,249 @@ EOF;
 			$this->message .= preg_replace('{^copy\(.*?\): }', '', $msg);
 		}
 	}
-	
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  function AddCommand($cmd,$help) {
+    global $smtdCommandList;
+    global $smtCommandHelp;
+    $smtCommandList[] = $cmd;
+    $smtCommandHelp[$cmd] = $help;
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function AddGoDestination($goCmd,$display,$url = '') {
+    global $goDestinations;
+    global $goDestinationsHelp;
+    global $goDestinationsUrl;
+    $goDestinations[] = $goCmd;
+    $goDestinationsHelp[$goCmd] = $display;
+    if ($url) {
+      $goDestinationsUrl[$goCmd] = $url;
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function AddPreference($pref, $value, $shortcut = '') {
+    global $smtPrefs;
+    global $smtPrefAliases;
+    $smtPrefs[$pref] = $value;
+    if ($shortcut) {
+      $smtPrefAliases[$shortcut] = $pref;
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  function ShowAuth() {
+    global $smtPrefs, $urlAccess, $urlAuth;
+    print "\n";
+    print "This application needs to be authorized to access your facebook account.\n";
+    print "\n";
+    print "Step 1: Allow basic (initial) access to your acount via this url:\n\n";
+    print "{$urlAccess}\n";
+    print "to launch this page, execute: smt go access\n";
+    print "\n";
+    print "Step 2: Generate an offline authorization code at this url:\n\n";
+    print "{$urlAuth}\n";
+    print "to launch this page, execute: smt go auth\n";
+    print "\n";
+    print "obtain your authorization code (XXXXXX) and then execute: smt auth XXXXXX\n\n";
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function GetGithubVersion($branch = 'master') {
+    try {
+      $phpFile = @file_get_contents("http://github.com/smartlogics-net/smt/raw/{$branch}/smt.php");
+      preg_match ("/smtVersion\s=\s'([^']+)'/",$phpFile,$matches);
+      if (isset($matches[1])) {
+        $githubVersion = $matches[1];
+      } else {
+        $githubVersion = 'err';
+      }
+      
+    } catch (Exception $e) {
+      $githubVersion = 'unavailable';
+    }
+    return $githubVersion;
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  function IsEmpty($obj) {
+    if (is_array($obj)) {
+      foreach ($obj as $o) {
+        if (!IsEmpty($o)) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      if ($obj) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function LaunchBrowser($url) {
+    global $smtPrefs;
+    global $hasLaunched;
+    $hasLaunched = true;
+    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+      pclose(popen("start \"\" /B \"{$url}\"", "r"));
+    } else {
+      if ($smtPrefs['launch_exec']) {
+        $execString = str_replace('[url]', $url, $smtPrefs['launch_exec']);
+        exec($execString);
+      } else {
+        if (strtoupper(substr(PHP_OS, 0, 6)) == 'DARWIN') {
+          exec("open \"{$url}\" > /dev/null 2>&1 &");
+        } else {
+          exec("xdg-open \"{$url}\" > /dev/null 2>&1 &");
+        }
+      }
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function ParseArguments($in_argv,$in_argc) {
+    global $smtCommand;
+    global $smtParams;
+    global $smtPrefs;
+    global $smtPrefAliases;
+    
+    for ($i=1; $i < $in_argc; $i++) {
+      $curArg = $in_argv[$i];
+      if (substr($curArg,0,2) == '--') {
+        while (substr($curArg,0,2) == '--') {
+          $curArg = substr($curArg,2);
+        }
+        if (strpos($curArg,"=")) {
+          $switchKey = str_replace(substr($curArg,0,strpos($curArg,"=")), array('-' => '_', '_' => '-'));
+          $switchValue = substr($curArg,strpos($curArg,"=")+1);
+          if ($switchValue == '') {
+            $switchValue = '0';
+          }
+        } else {
+          $switchKey = $curArg;
+          $switchValue = '1';
+        }
+        $switchKey = strtolower($switchKey);
+        if (isset($smtPrefAliases[$switchKey])) {
+          $switchKey = $smtPrefAliases[$switchKey];
+        }
+        if (isset($smtPrefs[$switchKey])) {
+          $smtPrefs[$switchKey] = $switchValue;
+        } else {
+          SmtWarning("Ignoring Parameter {$i}: Unknown Switch [{$switchKey}]");
+        }
+      } else {
+        if ($smtCommand == '') {
+          $smtCommand = strtoupper($curArg);
+          $smtParams[] = $smtCommand;
+        } else {
+          $smtParams[] = $curArg;
+        }
+      }
+    }
+  }
+
+////////////////////////////////////////////////////////////////////////////////
+  
+  function SmtException(Exception $e, $defaultCommand = true) {
+    if ($defaultCommand) {
+      global $smtCommand;
+      $defaultCommand = $smtCommand;
+    }
+    $eCode = $e->getCode();
+    SmtFatalError("{$defaultCommand}\n[{$eCode}] {$e->getMessage()}");
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function SmtFatalError($err) {
+    global $smtVersion;
+    print "smt [v{$smtVersion}] ERROR: {$err}";
+    PrintFinish();
+    exit;
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function SmtWarning($err) {
+    global $smtVersion;
+    print "smt [v{$smtVersion}] WARNING: {$err}";
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function TraceReturn($obj) {
+    global $smtPrefs;
+    if ($smtPrefs['trace']) {
+      print_r ($obj);
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function ValidateParamCount($a, $b=null)
+  {
+    global $smtParams;
+    global $smtCommand;
+    $num  = ParamCount();
+    $showHelp = false;
+    if (is_array($a)) {
+      if (!in_array($num,$a)) {
+        $showHelp = true;
+      }
+    } else {
+      if ($b == null) {
+        if ($num != $a) {
+          $showHelp = true;
+        }
+      } else {
+        if (($num < $a)||($num > $b)) {
+          $showHelp = true;
+        }
+      }
+    }
+    if ($showHelp) {
+      print "\n";
+      SmtWarning("[{$smtCommand}] Invalid number of parameters");
+      print "\n";
+      print "try:        [smt help ". strtolower($smtCommand). "]\nto launch:  http://smt.dtompkins.com/commands/" . strtolower($smtCommand) . "\n\nbasic help:\n\n";
+      displayHelpCmd($smtCommand);
+      exit;
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+  
+  function VerifyOutputDir($fileName) {
+    global $smtPrefs;
+    $fileName = str_replace('\\', '/', $fileName);
+    if (strrpos($fileName,'/')) {
+      $filePath = CleanPath(substr($fileName, 0, strrpos($fileName, '/')));
+      if (!file_exists($filePath)) {
+        if ($smtPrefs['auto_mkdir']) {
+          if (!mkdir($filePath, $smtPrefs['mkdir_mode'], true)) {
+            SmtFatalError("Could Not Create Path: {$filePath}");
+          }
+        } else {
+          SmtFatalError("Invalid Path: {$filePath}");
+        }
+      }
+    }
+  }
+  
+////////////////////////////////////////////////////////////////////////////////
+
 ?>
