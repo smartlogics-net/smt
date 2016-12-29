@@ -944,7 +944,7 @@ EOF;
                 out("  from object '{$obj['name']} (ID: {$obj['id']})...", 'info');
             }
 
-            if (!partName) {
+            if (!$partName) {
                 $parts = ['posts', 'feed', 'likes'];
                 foreach ($parts as $part) {
                     if (!downloadParts($facebook, $errorHandler, $destDir, $object, $part, $quiet)) {
@@ -952,7 +952,7 @@ EOF;
                     }
                 }
             }
-            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName)) {
+            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet)) {
                 continue;
             }
 			
