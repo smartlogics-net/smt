@@ -945,12 +945,18 @@ EOF;
             }
 
             if (!partName) {
-                downloadParts($facebook, $errorHandler, $destDir, $object, 'posts', $quiet) || continue;
-                downloadParts($facebook, $errorHandler, $destDir, $object, 'feed', $quiet) || continue;
-                downloadParts($facebook, $errorHandler, $destDir, $object, 'likes', $quiet) || continue;
+                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'posts', $quiet)) {
+                    continue;
+                }
+                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'feed', $quiet)) {
+                    continue;
+                }
+                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'likes', $quiet)) {
+                    continue;
+                }
             }
-            else {
-                downloadParts($facebook, $errorHandler, $destDir, $object, $partName) || continue;
+            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName))
+                continue;
             }
 			
 			break;
