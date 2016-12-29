@@ -955,7 +955,7 @@ EOF;
                     continue;
                 }
             }
-            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName))
+            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName)) {
                 continue;
             }
 			
