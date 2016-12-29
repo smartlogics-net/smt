@@ -49,7 +49,7 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
     
-    $smtVersion = '1.1';
+    $smtVersion = '1.2';
     
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -925,50 +925,12 @@ EOF;
 				out("Downloading $version...", 'info');
 			}
 			
-			$url       = "/{$object}/posts?limit=5";
 			$errorHandler = new ErrorHandler();
 			set_error_handler(array($errorHandler, 'handleError'));
 			
-			$resp = $facebook->get($url);
-
-			#var_dump($resp);
-			if (! isset($resp)) {
-				continue;
-			}
-			$posts = $resp->getGraphEdge();
-			$i=0;
-			do {
-				foreach ($posts as $post) {
-					$time = $post['created_time']->format(DateTime::COOKIE);
-					#echo "<h3>{$time}</h3>";
-					#if(isset($post['message']) && $post['message']) echo "<p>".make_links($post['message'])."</p>";
-					#if(isset($post['story']) && $post['story']) echo "<p>".make_links($post['story'])."</p>";
-					
-					$file = $dir.DIRECTORY_SEPARATOR.$post['id'].'.txt';
-					
-					if (is_readable($file)){
-						#@unlink($file);
-						continue;
-					}
-					$fh = fopen($file, 'w');
-					if (!$fh) {
-						out('Could not create file '.$file.': '.$errorHandler->message, 'error');
-					}
-					if (!fwrite($fh, (in_array('story', $post->getPropertyNames()) ? $post['story'].'---'."\r\n" : '').(in_array('message', $post->getPropertyNames()) ? $post['message'] : ' - no content - '))) {
-						out('Download failed: '.$errorHandler->message, 'error');
-					}
-					fclose($fh);
-					
-					if($i !== count($posts)-1){
-						#echo '<hr>';
-					}
-					if (!$quiet) {
-						echo ".";
-					}
-					
-					$i++;
-				}
-			} while ($posts = $facebook->next($posts));
+            downloadParts($facebook, $destDir, $object, 'posts');
+            downloadParts($facebook, $destDir, $object, 'feeds');
+            downloadParts($facebook, $destDir, $object, 'likes');
 			
 			break;
 		}
@@ -987,6 +949,56 @@ EOF;
 		}
 	}
 	
+    function donloadParts($facebook, $destDir, $object, $partName, $limit = 5) {
+        $targetDir = $destDir.DIRECTOR_SEPARATOR.$object.DIRECTOR_SEPARATOR.$partName;
+        if (!is_dir($targetDir)) {
+            #			@unlink($dir);
+            @mkdir($targetDir, 0777, true);
+        }
+        
+        $url       = "/{$object}/{$partName}?limit={$limit}";
+        $resp = $facebook->get($url);
+        
+        #var_dump($resp);
+        if (! isset($resp)) {
+            continue;
+        }
+        $parts = $resp->getGraphEdge();
+        $i=0;
+        do {
+            foreach ($parts as $part) {
+                $time = $part['created_time']->format(DateTime::COOKIE);
+                #echo "<h3>{$time}</h3>";
+                #if(isset($post['message']) && $post['message']) echo "<p>".make_links($post['message'])."</p>";
+                #if(isset($post['story']) && $post['story']) echo "<p>".make_links($post['story'])."</p>";
+                
+                $file = $targetDir.DIRECTORY_SEPARATOR.$part['id'].'.txt';
+                
+                if (is_readable($file)){
+                    #@unlink($file);
+                    continue;
+                }
+                $fh = fopen($file, 'w');
+                if (!$fh) {
+                    out('Could not create file '.$file.': '.$errorHandler->message, 'error');
+                }
+                if (!fwrite($fh, (in_array('story', $part->getPropertyNames()) ? $part['story'].'---'."\r\n" : '').(in_array('message', $part->getPropertyNames()) ? $part['message'] : ' - no content - '))) {
+                    out('Download failed: '.$errorHandler->message, 'error');
+                }
+                fclose($fh);
+                
+                if($i !== count($parts)-1){
+                    #echo '<hr>';
+                }
+                if (!$quiet) {
+                    echo ".";
+                }
+                
+                $i++;
+            }
+        } while ($parts = $facebook->next($parts));
+    }
+    
 	/**
 	 * convert links
 	 */
