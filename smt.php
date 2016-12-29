@@ -945,14 +945,11 @@ EOF;
             }
 
             if (!partName) {
-                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'posts', $quiet)) {
-                    continue;
-                }
-                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'feed', $quiet)) {
-                    continue;
-                }
-                if (!downloadParts($facebook, $errorHandler, $destDir, $object, 'likes', $quiet)) {
-                    continue;
+                $parts = ['posts', 'feed', 'likes'];
+                foreach ($parts as $part) {
+                    if (!downloadParts($facebook, $errorHandler, $destDir, $object, $part, $quiet)) {
+                        continue;
+                    }
                 }
             }
             else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName)) {
