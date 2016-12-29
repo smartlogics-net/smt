@@ -437,6 +437,7 @@
 		$version     = getOptValue('--version', $argv, false);
 		$object      = getOptValue('--object', $argv, 'me');
 		$accessToken = getOptValue('--access-token', $argv, $GLOBALS['smtUserSecretKey']);
+        $partName    = getOptValue('--part', $argv, false);
 		$cafile      = getOptValue('--cafile', $argv, false);
 		
 		if (!checkParams($destDir, $version, $accessToken)) {
@@ -456,7 +457,7 @@
 		
 		if ($ok || $force) {
 			setTimezone("UTC");
-			download($version, $destDir, $object, $quiet, $disableTls, $accessToken, $channel);
+			download($version, $destDir, $object, $partName, $quiet, $disableTls, $accessToken, $channel);
 			showWarnings($warnings);
 			showSecurityWarning($disableTls);
 			exit(0);
@@ -485,8 +486,9 @@
 		--snapshot           install the latest version from the snapshot (dev builds) channel instead of stable
 		--version="..."      accepts a specific version to install instead of the latest
 		--object="..."       accepts a source object (default: me)
-		--access-token       accepts a Access Token string for user request authorization
-			
+		--access-token="..." accepts a Access Token string for user request authorization
+        --parts="..."        accepts a specific part of the facebook object graph
+            
 			deprecated:
 			
 		--disable-tls        disable SSL/TLS security for file downloads
@@ -871,7 +873,7 @@ EOF;
 	/**
 	 * installs composer to the current working directory
 	 */
-	function download($version, $destDir, $object, $quiet, $disableTls, $accessToken, $channel)
+	function download($version, $destDir, $object, $partName, $quiet, $disableTls, $accessToken, $channel)
 	{
         global $smtPrefs;
         
@@ -928,9 +930,28 @@ EOF;
 			$errorHandler = new ErrorHandler();
 			set_error_handler(array($errorHandler, 'handleError'));
 			
-            downloadParts($facebook, $errorHandler, $destDir, $object, 'posts');
-            downloadParts($facebook, $errorHandler, $destDir, $object, 'feeds');
-            downloadParts($facebook, $errorHandler, $destDir, $object, 'likes');
+            if (!$quiet) {
+            
+                $url       = "/{$object}";
+                $resp = $facebook->get($url);
+                
+                #var_dump($resp);
+                if (! isset($resp)) {
+                    continue;
+                }
+                $obj = $resp->getGraphEdge();
+                
+                out("  from object '{$obj['name']} (ID: {$obj['id']})...", 'info');
+            }
+
+            if (!partName) {
+                downloadParts($facebook, $errorHandler, $destDir, $object, 'posts', $quiet) || continue;
+                downloadParts($facebook, $errorHandler, $destDir, $object, 'feed', $quiet) || continue;
+                downloadParts($facebook, $errorHandler, $destDir, $object, 'likes', $quiet) || continue;
+            }
+            else {
+                downloadParts($facebook, $errorHandler, $destDir, $object, $partName) || continue;
+            }
 			
 			break;
 		}
@@ -949,19 +970,23 @@ EOF;
 		}
 	}
 	
-    function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $limit = 5) {
+    function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $limit = 5) {
         $targetDir = $destDir.DIRECTOR_SEPARATOR.$object.DIRECTOR_SEPARATOR.$partName;
         if (!is_dir($targetDir)) {
             #			@unlink($dir);
             @mkdir($targetDir, 0777, true);
         }
         
+        if (!$quiet) {
+            out("  Recieving /{$partName} (package size: {$limit})...", 'info');
+        }
+
         $url       = "/{$object}/{$partName}?limit={$limit}";
         $resp = $facebook->get($url);
         
         #var_dump($resp);
         if (! isset($resp)) {
-            continue;
+            return false;
         }
         $parts = $resp->getGraphEdge();
         $i=0;
@@ -997,6 +1022,8 @@ EOF;
                 $i++;
             }
         } while ($parts = $facebook->next($parts));
+        
+        return true;
     }
     
 	/**
