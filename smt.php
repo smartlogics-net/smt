@@ -928,9 +928,9 @@ EOF;
 			$errorHandler = new ErrorHandler();
 			set_error_handler(array($errorHandler, 'handleError'));
 			
-            downloadParts($facebook, $destDir, $object, 'posts');
-            downloadParts($facebook, $destDir, $object, 'feeds');
-            downloadParts($facebook, $destDir, $object, 'likes');
+            downloadParts($facebook, $errorHandler, $destDir, $object, 'posts');
+            downloadParts($facebook, $errorHandler, $destDir, $object, 'feeds');
+            downloadParts($facebook, $errorHandler, $destDir, $object, 'likes');
 			
 			break;
 		}
@@ -949,7 +949,7 @@ EOF;
 		}
 	}
 	
-    function donloadParts($facebook, $destDir, $object, $partName, $limit = 5) {
+    function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $limit = 5) {
         $targetDir = $destDir.DIRECTOR_SEPARATOR.$object.DIRECTOR_SEPARATOR.$partName;
         if (!is_dir($targetDir)) {
             #			@unlink($dir);
