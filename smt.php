@@ -939,7 +939,7 @@ EOF;
                 if (! isset($resp)) {
                     continue;
                 }
-                $obj = $resp->getGraphEdge();
+                $obj = $resp->getGraphNode();
                 
                 out("  from object '{$obj['name']} (ID: {$obj['id']})...", 'info');
             }
