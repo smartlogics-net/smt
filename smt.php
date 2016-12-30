@@ -1039,7 +1039,7 @@ EOF;
                 fclose($fh);
                 
                 if ($level > 0) {
-                    $respLikes = $facebook->get("/".$part->getId()."/likes");
+                    $respLikes = $facebook->get("/".$part['id']."/likes");
                     if (isset($respLikes)) {
                         $likes = $respLikes->getGraphEdge();
                         do {
@@ -1047,7 +1047,7 @@ EOF;
                                 if (!$quiet) {
                                     echo "{$level}>";
                                 }
-                                if (!download($facebook, $errorHandler, $destDir, $like->getId(), false, $quiet, $level - 1, 5)) {
+                                if (!download($facebook, $errorHandler, $destDir, $like['id'], false, $quiet, $level - 1, 5)) {
                                     return false;
                                 }
                             }
