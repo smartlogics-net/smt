@@ -964,12 +964,12 @@ EOF;
             $url       = "/{$object}";
             $resp = $facebook->get($url);
                            
-            #var_dump($resp);
+            var_dump($resp);
             if (! isset($resp)) {
                 return false;
             }
             $obj = $resp->getGraphNode();
-                           
+            var_dump($obj);
             out("  from object '{$obj['name']}' (ID: {$obj['id']})...", 'info');
         }
                            
@@ -998,8 +998,10 @@ EOF;
             out("  Recieving {$partName} (package size: {$limit})...", 'info');
         }
 
-        $url       = "/{$object}/{$partName}?limit={$limit}";
-        if (!$since) {
+        $url       = "/{$object}/{$partName}/?";
+        if ($limit) {
+            $url .= "&limit={$limit}";
+        if ($since) {
             $url .= "&since={$since}";
         }
         $resp = $facebook->get($url);
