@@ -988,7 +988,7 @@ EOF;
     }
 	
     function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $level, $limit) {
-        $targetDir = $destDir.DIRECTOR_SEPARATOR.$object.DIRECTOR_SEPARATOR.$partName;
+        $targetDir = $destDir.DIRECTORY_SEPARATOR.$object.DIRECTORY_SEPARATOR.$partName;
         if (!is_dir($targetDir)) {
             #			@unlink($dir);
             @mkdir($targetDir, 0777, true);
@@ -1047,7 +1047,7 @@ EOF;
                                 if (!$quiet) {
                                     echo "{$level}>";
                                 }
-                                if (!download($facebook, $errorHandler, $destDir, $like['id'], false, $quiet, $level - 1, 5)) {
+                                if (!downloadObject($facebook, $errorHandler, $destDir, $like['id'], false, $quiet, $level - 1, 5)) {
                                     return false;
                                 }
                             }
