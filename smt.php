@@ -439,8 +439,9 @@
 		$accessToken = getOptValue('--access-token', $argv, $GLOBALS['smtUserSecretKey']);
         $partName    = getOptValue('--part', $argv, false);
 		$cafile      = getOptValue('--cafile', $argv, false);
+        $levels      = getOptValue('--levels', $argv, 1);
 		
-		if (!checkParams($destDir, $version, $accessToken)) {
+		if (!checkParams($destDir, $version, $accessToken, $levels)) {
 			exit(1);
 		}
 		
@@ -457,7 +458,7 @@
 		
 		if ($ok || $force) {
 			setTimezone("UTC");
-			download($version, $destDir, $object, $partName, $quiet, $disableTls, $accessToken, $channel);
+			download($version, $destDir, $object, $partName, $quiet, $levels, $disableTls, $accessToken, $channel);
 			showWarnings($warnings);
 			showSecurityWarning($disableTls);
 			exit(0);
@@ -488,6 +489,7 @@
 		--object="..."       accepts a source object (default: me)
 		--access-token="..." accepts a Access Token string for user request authorization
         --parts="..."        accepts a specific part of the facebook object graph
+        --levels=0           accepts a recursion level for following likes (default: 1)
             
 			deprecated:
 			
@@ -573,7 +575,7 @@ EOF;
 	 *
 	 * @return bool True if the supplied params are okay
 	 */
-	function checkParams($destDir, $version, $accessToken)
+	function checkParams($destDir, $version, $accessToken, $level)
 	{
 		$result = true;
 		
@@ -595,7 +597,13 @@ EOF;
 		*/
 		if (false !== $accessToken && !validateAccessToken($accessToken)) {
 			out("The defined Access Token (${accessToken}) is not valid.", 'info');
+            $resulT = false;
 		}
+        
+        if (!is_numeric($level)) {
+            out("The defined recusion level (${level}) for following likes is not numeric.", 'info');
+            $result = false;
+        }
 		
 		return $result;
 	}
@@ -873,7 +881,7 @@ EOF;
 	/**
 	 * installs composer to the current working directory
 	 */
-	function download($version, $destDir, $object, $partName, $quiet, $disableTls, $accessToken, $channel)
+	function download($version, $destDir, $object, $partName, $quiet, $level, $disableTls, $accessToken, $channel)
 	{
         global $smtPrefs;
         
@@ -930,33 +938,9 @@ EOF;
 			$errorHandler = new ErrorHandler();
 			set_error_handler(array($errorHandler, 'handleError'));
 			
-            if (!$quiet) {
-            
-                $url       = "/{$object}";
-                $resp = $facebook->get($url);
-                
-                #var_dump($resp);
-                if (! isset($resp)) {
-                    continue;
-                }
-                $obj = $resp->getGraphNode();
-                
-                out("  from object '{$obj['name']} (ID: {$obj['id']})...", 'info');
+            if (downloadObject($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $level, 5)) {
+                break;
             }
-
-            if (!$partName) {
-                $parts = ['posts', 'feed', 'likes'];
-                foreach ($parts as $part) {
-                    if (!downloadParts($facebook, $errorHandler, $destDir, $object, $part, $quiet)) {
-                        continue;
-                    }
-                }
-            }
-            else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet)) {
-                continue;
-            }
-			
-			break;
 		}
 		
 		if ($errorHandler->message) {
@@ -972,8 +956,38 @@ EOF;
 			#out(PHP_EOL."Use it: php $destPath", 'info');
 		}
 	}
+    
+    function downloadObject($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $level, $limit) {
+        
+        if (!$quiet) {
+                           
+            $url       = "/{$object}";
+            $resp = $facebook->get($url);
+                           
+            #var_dump($resp);
+            if (! isset($resp)) {
+                return false;
+            }
+            $obj = $resp->getGraphNode();
+                           
+            out("  from object '{$obj['name']}' (ID: {$obj['id']})...", 'info');
+        }
+                           
+        if (!$partName) {
+            $parts = ['posts', 'feed'];
+            foreach ($parts as $part) {
+                if (!downloadParts($facebook, $errorHandler, $destDir, $object, $part, $quiet, $level, $limit)) {
+                    return false;
+                }
+            }
+        }
+        else if (!downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $level, $limit)) {
+            return false;
+        }
+        return true;
+    }
 	
-    function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $limit = 5) {
+    function downloadParts($facebook, $errorHandler, $destDir, $object, $partName, $quiet, $level, $limit) {
         $targetDir = $destDir.DIRECTOR_SEPARATOR.$object.DIRECTOR_SEPARATOR.$partName;
         if (!is_dir($targetDir)) {
             #			@unlink($dir);
@@ -981,10 +995,13 @@ EOF;
         }
         
         if (!$quiet) {
-            out("  Recieving /{$partName} (package size: {$limit})...", 'info');
+            out("  Recieving {$partName} (package size: {$limit})...", 'info');
         }
 
         $url       = "/{$object}/{$partName}?limit={$limit}";
+        if (!$since) {
+            $url .= "&since={$since}";
+        }
         $resp = $facebook->get($url);
         
         #var_dump($resp);
@@ -1004,22 +1021,45 @@ EOF;
                 
                 if (is_readable($file)){
                     #@unlink($file);
+                    if (!$quiet) {
+                        echo "-";
+                    }
                     continue;
                 }
                 $fh = fopen($file, 'w');
                 if (!$fh) {
                     out('Could not create file '.$file.': '.$errorHandler->message, 'error');
                 }
-                if (!fwrite($fh, (in_array('story', $part->getPropertyNames()) ? $part['story'].'---'."\r\n" : '').(in_array('message', $part->getPropertyNames()) ? $part['message'] : ' - no content - '))) {
+                $content = (in_array('story', $part->getPropertyNames()) ? $part['story'].'---'."\r\n" : '');
+                $content .= (in_array('name', $part->getPropertyNames()) ? $part['name'].'---'."\r\n" : '');
+                $content .= (in_array('message', $part->getPropertyNames()) ? $part['message'] : ' - no content - ');
+                if (!fwrite($fh, $content)) {
                     out('Download failed: '.$errorHandler->message, 'error');
                 }
                 fclose($fh);
+                
+                if ($level > 0) {
+                    $respLikes = $facebook->get("/".$part->getId()."/likes");
+                    if (isset($respLikes)) {
+                        $likes = $respLikes->getGraphEdge();
+                        do {
+                            foreach($likes as $like) {
+                                if (!$quiet) {
+                                    echo "{$level}>";
+                                }
+                                if (!download($facebook, $errorHandler, $destDir, $like->getId(), false, $quiet, $level - 1, 5)) {
+                                    return false;
+                                }
+                            }
+                        } while ($likes = $facebook->next($likes));
+                    }
+                }
                 
                 if($i !== count($parts)-1){
                     #echo '<hr>';
                 }
                 if (!$quiet) {
-                    echo ".";
+                    echo "v";
                 }
                 
                 $i++;
