@@ -970,7 +970,7 @@ EOF;
             }
             $obj = $resp->getGraphNode();
             var_dump($obj);
-            out("  from object '{$obj['name']}' (ID: {$obj['id']})...", 'info');
+            out("  from object {$object} '{$obj['name']}' (ID: {$obj['id']})...", 'info');
         }
                            
         if (!$partName) {
@@ -1001,6 +1001,7 @@ EOF;
         $url       = "/{$object}/{$partName}/?";
         if ($limit) {
             $url .= "&limit={$limit}";
+        }
         if ($since) {
             $url .= "&since={$since}";
         }
