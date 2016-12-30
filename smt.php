@@ -49,7 +49,7 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
     
-    $smtVersion = '1.2.1';
+    $smtVersion = '1.3';
     
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -964,12 +964,12 @@ EOF;
             $url       = "/{$object}";
             $resp = $facebook->get($url);
                            
-            var_dump($resp);
+            #var_dump($resp);
             if (! isset($resp)) {
                 return false;
             }
             $obj = $resp->getGraphNode();
-            var_dump($obj);
+            #var_dump($obj);
             out("  from object {$object} '{$obj['name']}' (ID: {$obj['id']})...", 'info');
         }
                            
